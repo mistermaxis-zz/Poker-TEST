@@ -1,38 +1,51 @@
 #include <iostream>
-#include <vector>
-#include <string>
 #include <cstdlib>
 #include <ctime>
 
 class Card {
   public:
     unsigned int card;
-    Card() { srand(time(nullptr)); card = rand % 52; }
+    Card() { card = 0; }
 };
 class IDealable {
 public:
     virtual void Deal(Card c) = 0;  
 };
-class Dealable:IDealable {
+class Dealable : public IDealable {
 private:
-    Card card;
+    Card m_card;
 public:
-    virtual void Deal(Card c) card(c) {  }
+    virtual void Deal(Card c) { m_card.card = c.card; }
+    Card showCard () { return m_card; }
 };
-class Table:Dealable {
+class Table : public Dealable {
     
 };
-class Player:Dealable {
+class Player : public Dealable {
     
 };
 class Dealer {
   public:
-    void Deal(Dealable d) { Card c; d.Deal(c); }
+    void Deal(Dealable d)
+    {
+        srand(time(nullptr));
+        Card card_;
+        card_.card = rand() % 52;
+        d.Deal(card_);
+    }
 };
 
 int main()
 {
-    std::vector<std::string> vec { "first" , "second", "third" }; 
-    std::cout << vec[0];
+    Table table1;
+    Player player1;
+    Dealer dealer1;
+    std::cout << table1.showCard().card << "\n";
+    std::cout << player1.showCard().card << "\n";
+    Card crd; crd.card = 8;
+    table1.Deal(crd);
+    std::cout << table1.showCard().card << "\n";
+    std::cout << player1.showCard().card << "\n";
+    
     return 0;
 }
